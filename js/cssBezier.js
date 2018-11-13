@@ -45,10 +45,10 @@ let lib = new BezierLibrary(document.querySelector('.lib'),
     [
         new BezierCube({
             x: 0.25,
-            y: 1
+            y: 0.1
         }, {
             x: 0.25,
-            y: 0.1
+            y: 1
         }, 'ease', '#6190E8'),
         new BezierCube({
             x: 0,
@@ -176,7 +176,7 @@ function switchToLogic() {
 }
 
 function calculate(p) {
-    return new Point((p.x / 300).toFixed(2), ((500 - p.y) / 300).toFixed(2));
+    return new Point(((p.x - 10) / 300).toFixed(2), ((450 - p.y) / 300).toFixed(2));
 }
 
 function draw() {
