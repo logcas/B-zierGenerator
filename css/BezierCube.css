@@ -1,0 +1,29 @@
+.cube {
+    display: inline-block;
+    position: relative;
+}
+
+.cube::after {
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.cube:hover {
+    cursor: pointer;
+}
+
+.cube .name {
+    z-index: 999;
+}
+
+.cube:hover .name {
+    visibility: visible;
+    font-size: 14px;
+    font-weight: bold;
+    color: #fff;
+    line-height: 80px;
+    text-align: center;
+}

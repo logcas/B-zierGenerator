@@ -6,180 +6,31 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>BezierCurve for css</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/main.css">
 </head>
 
-<style>
-    body {
-        margin: 0;
-        padding: 0;
-    }
-
-    #app {
-        margin: 0;
-        padding: 0;
-        background: #e5e5e5;
-    }
-
-    #canvas {
-        margin: 10px;
-        background: #fff;
-    }
-</style>
-
 <body>
-    <div id="app">
+    <div id="app" class="clearFix">
         <canvas id="canvas">
             你的浏览器不支持canvas
         </canvas>
-        <h1 id="formula" style="float: right;margin-right: 20px;">Hello,world</h1>
+        <div class="right">
+            <h1>Library</h1>
+            <h3>Standard</h3>
+            <div class="lib"></div>
+            <h3>Custom</h3>
+        </div>
+        <div class="content">
+            <h1 id="formula">Hello,world</h1>
+            <h3>Preview</h3>
+            <p>Duration：<input type="range" value="2" max="10" min="0.1" step="0.1"><span id="duration"></span></p>
+            <button id="play">Play</button>
+            <div class="demo"></div>
+        </div>
     </div>
-    <script>
-        function Point(x, y, radius, color) {
-            this.x = x;
-            this.y = y;
-            this.radius = radius;
-            this.color = color;
-        }
-
-        Point.prototype.draw = function (ctx) {
-            ctx.beginPath();
-            ctx.moveTo(this.x, this.y);
-            ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI, false);
-            ctx.fillStyle = this.color;
-            ctx.fill();
-        }
-
-        let canvas = document.querySelector('#canvas'),
-            formula = document.querySelector('#formula');
-        canvas.height = 600;
-        canvas.width = 320;
-
-        let ctx = canvas.getContext('2d'),
-            origin = {
-                x: 10,
-                y: 450
-            },
-            axisLength = 300,
-            idx = -1;
-
-        let closePoint = [
-                new Point(10, 450, 10, '#e6d'),
-                new Point(310, 150, 10, '#e6d')
-            ],
-            movePoint = [
-                new Point(100, 200, 10, 'red'),
-                new Point(250, 350, 10, 'blue')
-            ],
-            logicPoint = [
-                new Point(0,0,10,'#fff'),
-                new Point(0,0,10,'#fff'),
-            ];
-
-        draw();
-
-        canvas.onmousedown = function (e) {
-            const x = e.layerX,
-                y = e.layerY;
-
-            console.log(x, y);
-
-            movePoint.forEach((p, index) => {
-                if (x > p.x - 10 && x < p.x + 10 && y > p.y - 10 && y < p.y + 10) {
-                    idx = index;
-                }
-            });
-
-            if (idx !== -1) {
-                canvas.onmousemove = dragPointMove;
-            }
-        }
-        canvas.onmouseup = function (e) {
-            canvas.onmousemove = null;
-            idx = -1;
-        }
-
-        function switchToLogic() {
-            logicPoint[0] = calculate(movePoint[0]);
-            logicPoint[1] = calculate(movePoint[1]);
-        }
-
-        function calculate(p) {
-            return new Point((p.x / 300).toFixed(2), ((500 - p.y) / 300).toFixed(2));
-        }
-
-        function draw() {
-
-            ctx.clearRect(0, 0, 320, 600);
-
-            drawAxis(ctx, origin, axisLength);
-
-            closePoint.forEach(el => el.draw(ctx));
-
-            movePoint.forEach(el => el.draw(ctx));
-
-            drawLine(ctx, closePoint[0], movePoint[0]);
-            drawLine(ctx, closePoint[1], movePoint[1]);
-
-            drawCurve(ctx, closePoint[0], closePoint[1], movePoint[0], movePoint[1]);
-
-            switchToLogic();
-
-            formula.textContent = `cubic-bezier(${logicPoint[0].x},${logicPoint[0].y},${logicPoint[1].x},${logicPoint[1].y})`;
-
-        }
-
-        function dragPointMove(e) {
-
-            let newX = e.layerX,
-                newY = e.layerY;
-
-
-            newX = newX > origin.x + axisLength ? origin.x + axisLength : newX;
-            newX = newX < origin.x ? origin.x : newX;
-
-            movePoint[idx].x = newX;
-            movePoint[idx].y = newY;
-
-            // 重绘
-            draw();
-
-        }
-
-        // 画坐标轴
-        function drawAxis(ctx, origin, length) {
-            ctx.beginPath();
-            ctx.moveTo(origin.x, origin.y);
-            ctx.lineTo(origin.x + length, origin.y);
-            ctx.moveTo(origin.x, origin.y);
-            ctx.lineTo(origin.x, origin.y - length);
-            ctx.strokeStyle = '#000';
-            ctx.lineCap = 'round';
-            ctx.lineWidth = 5;
-            ctx.stroke();
-        }
-
-        // 画连线
-        function drawLine(ctx, p0, p1) {
-
-            ctx.beginPath();
-            ctx.moveTo(p0.x, p0.y);
-            ctx.lineTo(p1.x, p1.y);
-            ctx.lineWidth = 2;
-            ctx.strokeStyle = 'gray';
-            ctx.stroke();
-
-        }
-
-        // 画三次贝塞尔曲线
-        function drawCurve(ctx, p0, p1, m0, m1) {
-            ctx.beginPath();
-            ctx.lineWidth = 5;
-            ctx.strokeStyle = '#000';
-            ctx.moveTo(p0.x, p0.y);
-            ctx.bezierCurveTo(m0.x, m0.y, m1.x, m1.y, p1.x, p1.y);
-            ctx.stroke();
-        }
-    </script>
+    <script src="js/BezierLibrary.js"></script>
+    <script src="js/BezierCube.js"></script>
+    <script src="js/cssBezier.js"></script>
 </body>
 
 </html>

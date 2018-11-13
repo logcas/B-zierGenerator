@@ -1,0 +1,63 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.clearFix {
+    *zoom: 1;
+}
+
+.clearFix::after {
+    display: block;
+    content: " ";
+    height: 0;
+    visibility: hidden;
+    clear: both;
+}
+
+#app {
+    margin: 0;
+    padding: 10px;
+    background: #e5e5e5;
+}
+
+#canvas {
+    float: left;
+    background: #fff;
+    border-radius: 10px;
+}
+
+.content {
+    margin-left: 330px;
+    margin-right: 400px;
+}
+
+.demo {
+    position: relative;
+    margin: 10px;
+    height: 80px;
+}
+
+.block {
+    position: absolute;
+    left: 0;
+    background: #e6d;
+    border-radius: 5px;
+}
+
+.block.compare {
+    top: 100px;
+}
+
+.block.move {
+    left: 400px;
+}
+
+.cube:hover {
+    cursor: pointer;
+}
+
+.right {
+    float: right;
+    width: 400px;
+}
