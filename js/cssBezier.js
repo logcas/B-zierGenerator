@@ -1,18 +1,3 @@
-function Point(x, y, radius, color) {
-    this.x = x;
-    this.y = y;
-    this.radius = radius;
-    this.color = color;
-}
-
-Point.prototype.draw = function (ctx) {
-    ctx.beginPath();
-    ctx.moveTo(this.x, this.y);
-    ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI, false);
-    ctx.fillStyle = this.color;
-    ctx.fill();
-}
-
 let canvas = document.querySelector('#canvas'),
     formula = document.querySelector('#formula'),
     transition = '';
@@ -124,8 +109,7 @@ preview.appendTo(demo);
 preview.addClass('block');
 
 compare.appendTo(demo);
-compare.addClass('block');
-compare.addClass('compare');
+compare.addClass('block compare');
 
 dur.textContent = t + ' s';
 
@@ -152,8 +136,6 @@ preview.setBezierCurve(logicPoint[0], logicPoint[1]);
 canvas.onmousedown = function (e) {
     const x = e.layerX,
         y = e.layerY;
-
-    console.log(x, y);
 
     movePoint.forEach((p, index) => {
         if (x > p.x - 10 && x < p.x + 10 && y > p.y - 10 && y < p.y + 10) {
