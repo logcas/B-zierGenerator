@@ -10,3 +10,6 @@
 展示你喜欢的贝塞尔曲线生成过程。
 
 在线演示：http://139.199.14.123/visualbezier/
+
+#### 动图演示
+![bezier](http://img.lxzmww.xyz/bezier.gif)
