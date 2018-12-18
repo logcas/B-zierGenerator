@@ -136,6 +136,10 @@
         function animation() {
             ++current;
             if (current >= t) {
+                MovePoints.splice(0,MovePoints.length);
+                ctx.clearRect(0,0,WIDTH,HEIGHT);
+                drawPoint();
+                drawLine();
                 TargetPoints.splice(0,TargetPoints.length);
                 return;
             }
