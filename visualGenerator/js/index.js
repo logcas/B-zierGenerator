@@ -23,7 +23,8 @@
     const config = {
         pointColor: '#000',
         lineColor: '#DCDCDC',
-        lineWidth: 10,
+        lineWidth: 5,
+        lineCap: 'round',
         radius: 5
     }
 
@@ -40,6 +41,7 @@
         ctx.moveTo(Points[0].x, Points[0].y);
         ctx.strokeStyle = config.lineColor;
         ctx.lineWidth = config.lineWidth;
+        ctx.lineCap = config.lineCap;
 
         for (let i = 1, len = Points.length; i < len; ++i) {
             ctx.lineTo(Points[i].x, Points[i].y);
@@ -110,11 +112,19 @@
         MovePoints.forEach((points, idx) => {
             ctx.beginPath();
             ctx.moveTo(points[0].x, points[0].y);
-            ctx.strokeStyle = moveLineColor[idx]
+            ctx.strokeStyle = moveLineColor[idx];
             ctx.lineWidth = 3;
+            // 绘制连线
             points.forEach(p => {
                 ctx.lineTo(p.x, p.y);
                 ctx.stroke();
+            });
+            // 绘制端点
+            points.forEach(p => {
+                ctx.beginPath();
+                ctx.fillStyle = moveLineColor[idx];
+                ctx.arc(p.x,p.y,config.radius,0,2*Math.PI,false);
+                ctx.fill();
             });
         });
 
@@ -122,7 +132,7 @@
         ctx.beginPath();
         ctx.moveTo(TargetPoints[0].x,TargetPoints[0].y);
         ctx.strokeStyle = 'red';
-        ctx.lineWidth = 4;
+        ctx.lineWidth = 3;
         TargetPoints.forEach(p => {
             ctx.lineTo(p.x,p.y);
             ctx.stroke();
@@ -166,6 +176,8 @@
         });
 
         scale = Points.length - 1;
+
+        moveLineColor.splice(0,moveLineColor.length);
 
         for (let i = 0; i < scale; ++i) {
             moveLineColor.push(randomColor());
