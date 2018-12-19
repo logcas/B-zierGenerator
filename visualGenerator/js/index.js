@@ -16,7 +16,8 @@
         TargetPoints = [], // 目标点集
         t = 200; // 绘制次数
 
-    let scale = 0; // 阶数
+    let scale = 0, // 阶数
+        isDrawing = false; // 控制变量
 
     // 固定点样式
     const config = {
@@ -141,6 +142,7 @@
                 drawPoint();
                 drawLine();
                 TargetPoints.splice(0,TargetPoints.length);
+                isDrawing = false;
                 return;
             }
             drawPoint();
@@ -173,12 +175,16 @@
     }
 
     drawBtn.onclick = function (e) {
-        if(Points.length < 2) return;
+        if(isDrawing || Points.length < 2) return;
+        TargetPoints.splice(0,TargetPoints.length);
+        isDrawing = true;
         animate();
     }
 
     clearBtn.onclick = function (e) {
+        if(isDrawing) return;
         ctx.clearRect(0,0,WIDTH,HEIGHT);
+        TargetPoints.splice(0,TargetPoints.length);
         Points.splice(0,Points.length);
     }
 
