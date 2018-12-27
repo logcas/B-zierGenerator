@@ -2,7 +2,10 @@
   "devDependencies": {
     "@types/node": "^10.12.18",
     "gulp": "^4.0.0",
+    "gulp-clean": "^0.4.0",
+    "gulp-clean-css": "^4.0.0",
     "gulp-connect": "^5.7.0",
+    "gulp-sourcemaps": "^2.6.4",
     "gulp-typescript": "^5.0.0",
     "gulp-uglify": "^3.0.1",
     "typescript": "^3.2.2"

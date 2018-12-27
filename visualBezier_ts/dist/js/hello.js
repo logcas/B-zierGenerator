@@ -1,1 +1,0 @@
-"use strict";var Hello;(Hello||(Hello={})).str="hello";

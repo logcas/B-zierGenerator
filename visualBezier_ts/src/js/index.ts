@@ -69,7 +69,6 @@ namespace Generator {
             if(this.isDrawing) return;
             this.points.push(point);
             this.drawStaticPoint();
-            console.log(this.points);
         }
 
         // 清除画布和点
