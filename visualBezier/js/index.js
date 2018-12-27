@@ -14,7 +14,7 @@
     const Points = [], // 固定点
         MovePoints = [], // 动点
         TargetPoints = [], // 目标点集
-        t = 200; // 绘制次数
+        t = 100; // 绘制次数
 
     let scale = 0, // 阶数
         isDrawing = false; // 控制变量
@@ -132,7 +132,7 @@
         ctx.beginPath();
         ctx.moveTo(TargetPoints[0].x,TargetPoints[0].y);
         ctx.strokeStyle = 'red';
-        ctx.lineWidth = 3;
+        ctx.lineWidth = 2;
         TargetPoints.forEach(p => {
             ctx.lineTo(p.x,p.y);
             ctx.stroke();
@@ -145,8 +145,8 @@
         let current = 0;
 
         function animation() {
-            ++current;
             if (current >= t) {
+                getMovePoint(1);
                 MovePoints.splice(0,MovePoints.length);
                 ctx.clearRect(0,0,WIDTH,HEIGHT);
                 drawPoint();
@@ -159,6 +159,7 @@
             getMovePoint(current / t);
             drawLine();
             MovePoints.splice(0,MovePoints.length);
+            ++current;
             window.requestAnimationFrame(animation);
         }
 
