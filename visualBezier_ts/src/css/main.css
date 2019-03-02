@@ -1,13 +1,29 @@
 body {
     background: #e8e8e8;
 }
-#app {
+#playground {
+    position: relative;
     margin: 10px auto;
-    display: block;
     width: 600px;
     height: 500px;
     border: 1px solid #000;
     background: #fff;
+}
+
+#curve {
+    position: absolute;
+    display: block;
+    width: 600px;
+    height: 500px;
+    z-index: 3;
+}
+
+#app {
+    position: absolute;
+    display: block;
+    width: 600px;
+    height: 500px;
+    z-index: 1;
 }
 .btn-group {
     margin: 10px auto;

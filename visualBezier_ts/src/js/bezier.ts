@@ -20,28 +20,34 @@ export interface Config {
 
 export class Bezier {
 
+    private curveCanvas: HTMLCanvasElement | null;
+    private curveCtx: CanvasRenderingContext2D | null;
+
     private canvas: HTMLCanvasElement | null;
     private ctx: CanvasRenderingContext2D | null;
     private config: Config;
 
     private points: Point[] = [];
     private movePoints: Point[][] = [];
-    private targetPoints: Point[] = [];
+    private startPoint: Point = { x: 0, y: 0 };
+    private curveNextPoint: Point = { x: 0, y: 0 };
     private moveLineColor: string[] = [];
 
-    private drawTimes: number = 100;
+    private drawTimes: number = 200;
     private scale: number = 0;
     private isDrawing: boolean = false;
 
-    constructor(canvas: HTMLCanvasElement, config?: Config) {
+    constructor(canvas: HTMLCanvasElement, curveCanvas: HTMLCanvasElement, config?: Config) {
 
-        if (typeof canvas === 'object') {
+        if (canvas !== null && curveCanvas !== null) {
             this.canvas = canvas;
+            this.curveCanvas = curveCanvas;
         } else {
             throw new Error("canvas is null");
         }
 
         this.ctx = this.canvas.getContext('2d');
+        this.curveCtx = this.curveCanvas.getContext('2d');
 
         if (config) {
             this.config = config
@@ -61,6 +67,9 @@ export class Bezier {
 
         this.canvas.width = this.config.width;
         this.canvas.height = this.config.height;
+        this.curveCanvas.width = this.config.width;
+        this.curveCanvas.height = this.config.height;
+
     }
 
     // 逐个点添加
@@ -74,9 +83,11 @@ export class Bezier {
     public clear(): void {
         if (this.isDrawing) return;
 
-        let ctx = this.ctx as CanvasRenderingContext2D;
+        let ctx = this.ctx as CanvasRenderingContext2D,
+            curveCtx = this.curveCtx as CanvasRenderingContext2D;
 
         ctx.clearRect(0, 0, this.config.width, this.config.height);
+        curveCtx.clearRect(0, 0, this.config.width, this.config.height);
 
         this.points = [];
     }
@@ -89,7 +100,9 @@ export class Bezier {
 
         if (this.isDrawing || this.points.length <= 1) return;
 
-        this.targetPoints = [];
+        console.log('draw start:');
+        this.startPoint = this.points[0];
+        console.log(this.startPoint);
         this.movePoints = [];
         this.moveLineColor = [];
 
@@ -99,9 +112,11 @@ export class Bezier {
             this.moveLineColor.push(this.randomColor());
         }
 
-        let ctx = this.ctx as CanvasRenderingContext2D;
+        let ctx = this.ctx as CanvasRenderingContext2D,
+            curveCtx = this.curveCtx as CanvasRenderingContext2D;
 
         ctx.clearRect(0, 0, this.config.width, this.config.height);
+        curveCtx.clearRect(0, 0, this.config.width, this.config.height);
 
         this.isDrawing = true;
 
@@ -123,13 +138,20 @@ export class Bezier {
                 ctx.clearRect(0, 0, self.config.width, self.config.height);
                 self.drawStaticPoint();
                 self.drawCurve();
-                self.targetPoints.splice(0, self.targetPoints.length);
+                self.startPoint = { x: 0, y: 0 };
+                self.curveNextPoint = { x: 0, y: 0 };
                 self.isDrawing = false;
                 return;
             }
             self.drawStaticPoint();
+            let startTime = new Date().getTime();
             self.calculateMovePoint(currentTimes / self.drawTimes);
+            let delta = new Date().getTime() - startTime;
+            console.log(`calculate: ${delta} ms`);
+            startTime = new Date().getTime();
             self.drawCurve();
+            delta = new Date().getTime() - startTime;
+            console.log(`render: ${delta} ms`);
             self.movePoints.splice(0, self.movePoints.length);
             ++currentTimes;
             window.requestAnimationFrame(animation);
@@ -214,14 +236,22 @@ export class Bezier {
         }
 
         if (temp.length === 1) {
-            this.targetPoints.push(temp[0]);
+            console.log('your startpoint:');
+            console.log(this.startPoint);
+            if (this.curveNextPoint.x !== 0 && this.curveNextPoint.y !== 0) {
+                this.startPoint = this.curveNextPoint;
+            }
+            this.curveNextPoint = temp[0];
         }
     }
 
     // 绘制
     private drawCurve(): void {
 
-        let ctx = this.ctx as CanvasRenderingContext2D;
+        let ctx = this.ctx as CanvasRenderingContext2D,
+            curveCtx = this.curveCtx as CanvasRenderingContext2D;
+
+        ctx.lineWidth = 3;
 
         // 绘制动点的直线
         this.movePoints.forEach((points: Point[], idx: number) => {
@@ -229,7 +259,6 @@ export class Bezier {
             ctx.beginPath();
             ctx.moveTo(points[0].x, points[0].y);
             ctx.strokeStyle = this.moveLineColor[idx];
-            ctx.lineWidth = 3;
 
             // 绘制连线
             points.forEach(p => {
@@ -238,25 +267,26 @@ export class Bezier {
             });
 
             // 绘制端点
+            
             points.forEach(p => {
                 ctx.beginPath();
                 ctx.fillStyle = this.moveLineColor[idx];
                 ctx.arc(p.x, p.y, this.config.style.radius, 0, 2 * Math.PI, false);
                 ctx.fill();
             });
+            
 
         });
 
         // 绘制贝塞尔曲线
-        ctx.beginPath();
-        ctx.moveTo(this.targetPoints[0].x, this.targetPoints[0].y);
-        ctx.strokeStyle = 'red';
-        ctx.lineWidth = 2;
-        this.targetPoints.forEach(p => {
-            ctx.lineTo(p.x, p.y);
-            ctx.stroke();
-        });
-
+        curveCtx.beginPath();
+        console.log('draw agian:');
+        console.log(this.startPoint);
+        curveCtx.moveTo(this.startPoint.x, this.startPoint.y);
+        curveCtx.strokeStyle = 'red'; // !TODO 优化
+        curveCtx.lineWidth = 2;
+        curveCtx.lineTo(this.curveNextPoint.x, this.curveNextPoint.y);
+        curveCtx.stroke();
     }
 
     // 随机生成颜色

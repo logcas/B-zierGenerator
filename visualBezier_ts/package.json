@@ -13,5 +13,25 @@
     "typescript": "^3.2.2",
     "vinyl-buffer": "^1.0.1",
     "vinyl-source-stream": "^2.0.0"
-  }
+  },
+  "name": "visualbezier_ts",
+  "description": "TypeScript编写的可视化贝塞尔曲线生成器，使用Gulp构建。",
+  "version": "0.0.2",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/logcas/B-zierGenerator.git"
+  },
+  "keywords": [
+    "bezier"
+  ],
+  "author": "Lucas",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/logcas/B-zierGenerator/issues"
+  },
+  "homepage": "https://github.com/logcas/B-zierGenerator#readme"
 }

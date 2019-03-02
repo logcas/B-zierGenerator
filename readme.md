@@ -11,6 +11,7 @@
 
 #### Log
 * 2018/12/27 - 用 TypeScript 重写并进行了封装。TypeScript版使用gulp构建。
+* 2019/03/02 - TypeScript版使用叠层Canvas将曲线和直线分开渲染，解决卡顿和曲线不直问题。（在线演示没有更新）
 
 [ [JavaScript版本](https://github.com/logcas/B-zierGenerator/tree/master/visualBezier) | [TypeScript版本](https://github.com/logcas/B-zierGenerator/tree/master/visualBezier_ts) ]
 
